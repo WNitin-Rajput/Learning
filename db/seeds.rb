@@ -26,60 +26,65 @@
 # Plan.destroy_all
 # User.destroy_all
 
-# puts "Creating Admin..."
+puts "Creating Admin..."
 
-# admin = User.create!(
-#   name: "Admin",
-#   email: "admin@example.com",
-#   password: "password123",
-#   role: 1,
-#   email_verified: true
-# )
+admin = User.find_or_create_by!(email: "admin@example.com") do |user|
+  user.name = "Admin"
+  user.password = "password123"
+  user.role = 1
+  user.email_verified = true
+end
 
-# puts "Admin created: #{admin.email}"
+puts "Admin exists: #{admin.email}"
 
+puts "Creating plans..."
 
-# puts "Creating plans..."
+plans = [
+  {
+    name: "Free",
+    plan_type: "free",
+    price: 0,
+    duration_hours: 0,
+    description: "Default free plan",
+    benefit: "No discount",
+    color: "#9CA3AF",
+    border_color: "#9CA3AF",
+    text_color: "#000",
+    popular: false
+  },
+  {
+    name: "Silver",
+    plan_type: "silver",
+    price: 499,
+    duration_hours: 6,
+    description: "Silver membership plan",
+    benefit: "10% discount on all products",
+    color: "#C0C0C0",
+    border_color: "#9CA3AF",
+    text_color: "#000",
+    popular: true
+  },
+  {
+    name: "Gold",
+    plan_type: "gold",
+    price: 999,
+    duration_hours: 12,
+    description: "Gold membership plan",
+    benefit: "20% discount on all products",
+    color: "#FFD700",
+    border_color: "#FBBF24",
+    text_color: "#000",
+    popular: false
+  }
+]
 
-# Plan.create!([
-#   {
-#     name: "Free",
-#     plan_type: "free",
-#     price: 0,
-#     duration_hours: 0,
-#     description: "Default free plan",
-#     benefit: "No discount",
-#     color: "#9CA3AF",
-#     border_color: "#9CA3AF",
-#     text_color: "#000",
-#     popular: false
-#   },
-#   {
-#     name: "Silver",
-#     plan_type: "silver",
-#     price: 499,
-#     duration_hours: 6, # 30 days
-#     description: "Silver membership plan",
-#     benefit: "10% discount on all products",
-#     color: "#C0C0C0",
-#     border_color: "#9CA3AF",
-#     text_color: "#000",
-#     popular: true
-#   },
-#   {
-#     name: "Gold",
-#     plan_type: "gold",
-#     price: 999,
-#     duration_hours: 12,
-#     description: "Gold membership plan",
-#     benefit: "20% discount on all products",
-#     color: "#FFD700",
-#     border_color: "#FBBF24",
-#     text_color: "#000",
-#     popular: false
-#   }
-# ])
+plans.each do |plan_attrs|
+  Plan.find_or_create_by!(plan_type: plan_attrs[:plan_type]) do |plan|
+    plan.assign_attributes(plan_attrs)
+  end
+end
 
+puts "Plans seeded successfully."
 
 # puts "Creating categories..."
 
